@@ -57,15 +57,37 @@ function openCode(key){const s=snippets[key],dlg=$("#codeDialog");$("#codeTitle"
 
 // Bindings
 document.querySelectorAll("[data-open-code]").forEach(b=>b.onclick=()=>openCode(b.dataset.openCode));$("#closeDialog").onclick=()=>$("#codeDialog").close();$("#codeDialog").onclick=e=>{if(e.target===$("#codeDialog"))e.target.close()};
-$("#epsilon").oninput=e=>$("#epsilonOut").textContent=fmt(e.target.value,2);$("#banditStep").onclick=banditStep;$("#banditRun").onclick=()=>{for(let i=0;i<200;i++)banditStep()};$("#banditReset").onclick=resetBandit;
-[["sessions","sessionsOut",v=>v],["elite","eliteOut",v=>`${v}%`],["stepPenalty","stepPenaltyOut",v=>fmt(v,2)]].forEach(([i,o,f])=>$("#"+i).oninput=e=>$("#"+o).textContent=f(e.target.value));$("#gridSize").onchange=initPolicy;$("#cemTrain").onclick=()=>trainCem(1);$("#cemAuto").onclick=()=>trainCem(10);$("#cemReset").onclick=initPolicy;$("#cemPlay").onclick=playCem;
-$("#fee").oninput=e=>$("#feeOut").textContent=`${fmt(e.target.value,2)}%`;$("#risk").oninput=e=>$("#riskOut").textContent=`${fmt(e.target.value,1)}%`;$("#tradeRun").onclick=simulateTrading;$("#tradeReset").onclick=simulateTrading;
-$("#newsWeight").oninput=e=>$("#newsWeightOut").textContent=`${e.target.value}%`;$("#position").oninput=e=>$("#positionOut").textContent=`${e.target.value}%`;$("#marlStep").onclick=marlStep;$("#marlRun").onclick=()=>{for(let i=0;i<30;i++)marlStep()};
-renderBanditInputs();renderBandit();initPolicy();simulateTrading();marlStep();
+if ($("#epsilon")) {
+  $("#epsilon").oninput=e=>$("#epsilonOut").textContent=fmt(e.target.value,2);
+  $("#banditStep").onclick=banditStep;
+  $("#banditRun").onclick=()=>{for(let i=0;i<200;i++)banditStep()};
+  $("#banditReset").onclick=resetBandit;
+  renderBanditInputs(); renderBandit();
+}
+if ($("#gridSize")) {
+  [["sessions","sessionsOut",v=>v],["elite","eliteOut",v=>`${v}%`],["stepPenalty","stepPenaltyOut",v=>fmt(v,2)]].forEach(([i,o,f])=>$("#"+i).oninput=e=>$("#"+o).textContent=f(e.target.value));
+  $("#gridSize").onchange=initPolicy; $("#cemTrain").onclick=()=>trainCem(1); $("#cemAuto").onclick=()=>trainCem(10); $("#cemReset").onclick=initPolicy; $("#cemPlay").onclick=playCem;
+  initPolicy();
+}
+if ($("#tradingAlgo")) {
+  $("#fee").oninput=e=>$("#feeOut").textContent=`${fmt(e.target.value,2)}%`; $("#risk").oninput=e=>$("#riskOut").textContent=`${fmt(e.target.value,1)}%`; $("#tradeRun").onclick=simulateTrading; $("#tradeReset").onclick=simulateTrading;
+  simulateTrading();
+}
+if ($("#coopMode")) {
+  $("#newsWeight").oninput=e=>$("#newsWeightOut").textContent=`${e.target.value}%`; $("#position").oninput=e=>$("#positionOut").textContent=`${e.target.value}%`; $("#marlStep").onclick=marlStep; $("#marlRun").onclick=()=>{for(let i=0;i<30;i++)marlStep()};
+  marlStep();
+}
 const captureSection = new URLSearchParams(location.search).get("capture");
 if (captureSection) {
   document.querySelectorAll("main > section").forEach(section => section.style.display = section.id === captureSection ? "block" : "none");
   const target = document.getElementById(captureSection);
   if (target) { target.style.paddingTop = "42px"; target.style.borderTop = "0"; }
+}
+const activeDemo = new URLSearchParams(location.search).get("demo") || "bandit";
+if (!captureSection) {
+  document.querySelectorAll(".lab").forEach(section => section.hidden = section.id !== activeDemo);
+  document.querySelectorAll('a[href*="demo="]').forEach(link => {
+    if (link.href.includes(`demo=${activeDemo}`)) link.setAttribute("aria-current", "page");
+  });
 }
 if (location.hash) { document.documentElement.style.scrollBehavior="auto"; requestAnimationFrame(() => document.querySelector(location.hash)?.scrollIntoView({block:"start",behavior:"auto"})); }
