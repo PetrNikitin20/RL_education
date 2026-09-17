@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Интерактивные демонстрации к лабораторным работам по обучению с подкреплением">
+  <title>RL Lab — интерактивный практикум</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="#overview" aria-label="RL Lab — главная">
+      <span class="brand-mark">RL</span><span>education</span>
+    </a>
+    <nav aria-label="Разделы практикума">
+      <a href="#bandit">Бандит</a><a href="#cem">CEM</a><a href="#trading">DQN</a><a href="#marl">MARL</a>
+    </nav>
+    <a class="repo-link" href="https://github.com/PetrNikitin20/RL_education" target="_blank" rel="noreferrer">GitHub ↗</a>
+  </header>
+
+  <main>
+    <section id="overview" class="hero section">
+      <div class="hero-copy">
+        <p class="eyebrow">ПАУР · подготовка к лабораторной работе</p>
+        <h1>От действия к<br><span>разумной политике</span></h1>
+        <p class="lead">Четыре интерактивных стенда: многорукий бандит, кросс-энтропийное обучение, торговый агент и мультиагентный портфель.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#bandit">Начать эксперимент</a>
+          <button class="button secondary" data-open-code="rl-loop">Показать цикл RL</button>
+        </div>
+        <div class="formula-strip">
+          <span>s<sub>t</sub></span><i>→</i><span>π(a|s)</span><i>→</i><span>a<sub>t</sub></span><i>→</i><span>r<sub>t+1</sub>, s<sub>t+1</sub></span>
+        </div>
+      </div>
+      <div class="hero-visual" aria-label="Цикл взаимодействия агента и среды">
+        <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+        <div class="node agent"><b>АГЕНТ</b><span>политика π</span></div>
+        <div class="node environment"><b>СРЕДА</b><span>динамика P</span></div>
+        <div class="flow action-flow">действие a<sub>t</sub> →</div>
+        <div class="flow reward-flow">← награда r<sub>t+1</sub></div>
+        <div class="metric-card"><small>Цель</small><strong>max 𝔼[G<sub>t</sub>]</strong></div>
+      </div>
+    </section>
+
+    <section class="concepts section compact">
+      <div class="section-heading">
+        <p class="eyebrow">01 · Базовая модель</p><h2>Шесть элементов задачи RL</h2>
+      </div>
+      <div class="concept-grid">
+        <article><em>01</em><h3>Состояние s</h3><p>Достаточная информация для принятия решения.</p></article>
+        <article><em>02</em><h3>Действие a</h3><p>То, чем агент воздействует на среду.</p></article>
+        <article><em>03</em><h3>Награда r</h3><p>Локальный сигнал качества, а не готовый ответ.</p></article>
+        <article><em>04</em><h3>Политика π</h3><p>Правило выбора действий, детерминированное или вероятностное.</p></article>
+        <article><em>05</em><h3>Ценность V, Q</h3><p>Ожидаемая дисконтированная сумма будущих наград.</p></article>
+        <article><em>06</em><h3>Модель P</h3><p>Вероятности переходов; может быть неизвестна агенту.</p></article>
+      </div>
+    </section>
+
+    <section id="bandit" class="lab section">
+      <div class="lab-intro">
+        <div><p class="eyebrow">02 · Exploration / exploitation</p><h2>Многорукий бандит</h2></div>
+        <p>Выберите стратегию, меняйте вероятности выигрыша автоматов и наблюдайте, как растут оценка ценности и накопленное сожаление.</p>
+      </div>
+      <div class="demo-shell bandit-shell">
+        <aside class="control-panel">
+          <label>Стратегия<select id="banditStrategy"><option value="epsilon">ε-greedy</option><option value="ucb">UCB1</option><option value="thompson">Thompson sampling</option></select></label>
+          <label>ε <output id="epsilonOut">0.10</output><input id="epsilon" type="range" min="0" max="0.5" step="0.01" value="0.1"></label>
+          <label>Вероятности выигрыша</label>
+          <div id="armInputs" class="arm-inputs"></div>
+          <div class="button-row"><button id="banditStep" class="button primary">1 шаг</button><button id="banditRun" class="button secondary">+200</button><button id="banditReset" class="icon-button" title="Сбросить">↻</button></div>
+          <button class="code-link" data-open-code="bandit">{ } Код и объяснение</button>
+        </aside>
+        <div class="demo-stage">
+          <div id="machines" class="machines"></div>
+          <div class="stat-row"><div><small>Шагов</small><strong id="banditSteps">0</strong></div><div><small>Награда</small><strong id="banditReward">0</strong></div><div><small>Сожаление</small><strong id="banditRegret">0.0</strong></div><div><small>Лучшая оценка</small><strong id="banditBest">—</strong></div></div>
+          <canvas id="banditChart" width="900" height="250" aria-label="График награды и сожаления"></canvas>
+        </div>
+      </div>
+      <div class="explain-grid"><article><b>Исследование</b><p>Случайно проверяем альтернативы и собираем информацию.</p></article><article><b>Использование</b><p>Выбираем действие с максимальной текущей оценкой Q(a).</p></article><article><b>Метрики</b><p>Средняя награда, доля оптимальных действий, cumulative regret.</p></article></div>
+    </section>
+
+    <section id="cem" class="lab section">
+      <div class="lab-intro">
+        <div><p class="eyebrow">03 · Лабораторная № 1</p><h2>Собака, кость и CEM</h2></div>
+        <p>Политика обучается на лучших траекториях. Порог элитности превращает накопленный опыт в новый обучающий набор.</p>
+      </div>
+      <div class="demo-shell cem-shell">
+        <aside class="control-panel">
+          <label>Размер поля<select id="gridSize"><option>7</option><option selected>9</option><option>11</option></select></label>
+          <label>Эпизодов в итерации<output id="sessionsOut">80</output><input id="sessions" type="range" min="20" max="200" step="20" value="80"></label>
+          <label>Элитный процентиль<output id="eliteOut">75%</output><input id="elite" type="range" min="50" max="95" step="5" value="75"></label>
+          <label>Штраф за шаг<output id="stepPenaltyOut">−0.02</output><input id="stepPenalty" type="range" min="-0.1" max="0" step="0.01" value="-0.02"></label>
+          <div class="button-row"><button id="cemTrain" class="button primary">Обучить ×1</button><button id="cemAuto" class="button secondary">×10</button><button id="cemReset" class="icon-button">↻</button></div>
+          <button class="code-link" data-open-code="cem">{ } Модули CEM</button>
+        </aside>
+        <div class="demo-stage cem-stage">
+          <div class="cem-layout">
+            <div id="dogGrid" class="dog-grid" aria-label="Среда собака и кость"></div>
+            <div class="cem-metrics">
+              <div class="score-ring"><span id="cemSuccess">0%</span><small>успех</small></div>
+              <dl><div><dt>Итерация</dt><dd id="cemIteration">0</dd></div><div><dt>Средняя награда</dt><dd id="cemMean">0.00</dd></div><div><dt>Порог элиты</dt><dd id="cemThreshold">—</dd></div><div><dt>Средняя длина</dt><dd id="cemLength">—</dd></div></dl>
+              <button id="cemPlay" class="button secondary wide">▶ Показать политику</button>
+            </div>
+          </div>
+          <canvas id="cemChart" width="900" height="220"></canvas>
+        </div>
+      </div>
+      <div class="pipeline"><span>1 · Сэмплировать N эпизодов</span><i>→</i><span>2 · Найти порог γ</span><i>→</i><span>3 · Отобрать элиту</span><i>→</i><span>4 · Обучить π<sub>θ</sub></span></div>
+    </section>
+
+    <section id="trading" class="lab section">
+      <div class="lab-intro">
+        <div><p class="eyebrow">04 · Q-learning → DDDQN</p><h2>Торговый агент</h2></div>
+        <p>Без обещаний доходности: учебный симулятор показывает, почему временное разбиение, комиссии и риск важнее красивой кривой обучения.</p>
+      </div>
+      <div class="demo-shell trading-shell">
+        <aside class="control-panel">
+          <label>Алгоритм<select id="tradingAlgo"><option>Q-learning</option><option>DQN</option><option>Double DQN</option><option selected>Dueling Double DQN</option></select></label>
+          <label>Комиссия<output id="feeOut">0.10%</output><input id="fee" type="range" min="0" max="0.5" step="0.05" value="0.1"></label>
+          <label>Риск-порог<output id="riskOut">2.0%</output><input id="risk" type="range" min="0.5" max="5" step="0.5" value="2"></label>
+          <label>Рыночный режим<select id="marketRegime"><option value="trend">Умеренный тренд</option><option value="sideways">Боковой рынок</option><option value="volatile">Высокая волатильность</option></select></label>
+          <div class="button-row"><button id="tradeRun" class="button primary">Симулировать</button><button id="tradeReset" class="icon-button">↻</button></div>
+          <button class="code-link" data-open-code="trading">{ } Архитектура агента</button>
+        </aside>
+        <div class="demo-stage">
+          <div class="chart-header"><div><small>Стоимость портфеля</small><strong id="equityValue">₽100 000</strong></div><div class="legend"><span class="agent-line">Агент</span><span class="base-line">Buy & Hold</span></div></div>
+          <canvas id="tradeChart" width="900" height="350"></canvas>
+          <div class="stat-row finance"><div><small>Доходность</small><strong id="tradeReturn">0.0%</strong></div><div><small>Sharpe</small><strong id="tradeSharpe">0.00</strong></div><div><small>Max drawdown</small><strong id="tradeDrawdown">0.0%</strong></div><div><small>Сделок</small><strong id="tradeCount">0</strong></div></div>
+        </div>
+      </div>
+      <div class="algorithm-cards"><article><b>DQN</b><p>Нейросеть аппроксимирует Q(s,a); replay-buffer разрушает корреляцию выборки.</p></article><article><b>DDQN</b><p>Online-сеть выбирает действие, target-сеть оценивает — меньше завышение.</p></article><article><b>Dueling</b><p>Раздельно оценивает V(s) и преимущество A(s,a), затем объединяет.</p></article></div>
+    </section>
+
+    <section id="marl" class="lab section">
+      <div class="lab-intro">
+        <div><p class="eyebrow">05 · Multi-agent RL</p><h2>Команда портфельных агентов</h2></div>
+        <p>Три специализированных агента предлагают решения. Координатор агрегирует их сигналы, не являясь четвертым агентом.</p>
+      </div>
+      <div class="demo-shell marl-shell">
+        <aside class="control-panel">
+          <label>Влияние новостей<output id="newsWeightOut">30%</output><input id="newsWeight" type="range" min="0" max="60" step="5" value="30"></label>
+          <label>Лимит позиции<output id="positionOut">45%</output><input id="position" type="range" min="20" max="80" step="5" value="45"></label>
+          <label>Режим кооперации<select id="coopMode"><option value="ctde">CTDE / общая награда</option><option value="independent">Независимые политики</option><option value="voting">Взвешенное голосование</option></select></label>
+          <button id="marlStep" class="button primary wide">Следующий день</button>
+          <button id="marlRun" class="button secondary wide">Прогнать 30 дней</button>
+          <button class="code-link" data-open-code="marl">{ } Контракты агентов</button>
+        </aside>
+        <div class="demo-stage marl-stage">
+          <div class="agent-network">
+            <article class="agent-card market"><span>01</span><b>Market Agent</b><small>тренд · импульс · волатильность</small><meter id="marketMeter" min="-1" max="1" value="0"></meter><output id="marketSignal">0.00</output></article>
+            <article class="agent-card risk"><span>02</span><b>Risk Agent</b><small>VaR · drawdown · лимиты</small><meter id="riskMeter" min="-1" max="1" value="0"></meter><output id="riskSignal">0.00</output></article>
+            <article class="agent-card news"><span>03</span><b>News Agent</b><small>сентимент · события · доверие</small><meter id="newsMeter" min="-1" max="1" value="0"></meter><output id="newsSignal">0.00</output></article>
+            <div class="coordinator"><small>КООРДИНАТОР</small><strong id="marlDecision">HOLD</strong><span id="marlConfidence">уверенность 0%</span></div>
+          </div>
+          <div class="allocation"><div><span>Акции</span><b id="stockAllocation">40%</b></div><div><span>Облигации</span><b id="bondAllocation">35%</b></div><div><span>Кэш</span><b id="cashAllocation">25%</b></div></div>
+          <div id="newsTicker" class="news-ticker">Нажмите «Следующий день», чтобы получить рыночное событие.</div>
+        </div>
+      </div>
+      <div class="marl-notes"><div><b>CTDE</b><p>Централизованное обучение, децентрализованное исполнение.</p></div><div><b>Нестационарность</b><p>Среда меняется вместе с политиками других агентов.</p></div><div><b>Credit assignment</b><p>Нужно понять вклад каждого агента в общую награду.</p></div><div><b>Инструменты</b><p>PettingZoo · RLlib · MARLlib.</p></div></div>
+    </section>
+
+    <section class="section final-cta">
+      <p class="eyebrow">Лабораторный маршрут</p><h2>Спроектируйте среду → определите метрики → обучите → проверьте гипотезу</h2>
+      <div class="deliverables"><span>README и гипотеза</span><span>Модульный код</span><span>Кривые обучения</span><span>Абляции</span><span>Выводы и ограничения</span></div>
+      <a class="button primary" href="https://github.com/PetrNikitin20/RL_education" target="_blank" rel="noreferrer">Открыть материалы на GitHub ↗</a>
+    </section>
+  </main>
+
+  <footer><span>© 2026 · Никитин Пётр Владимирович · кафедра искусственного интеллекта ФУ</span><span>Учебная демонстрация, не инвестиционная рекомендация</span></footer>
+
+  <dialog id="codeDialog">
+    <button id="closeDialog" class="dialog-close" aria-label="Закрыть">×</button>
+    <p class="eyebrow" id="codeKicker">Код</p><h2 id="codeTitle">Модуль</h2><p id="codeExplain"></p>
+    <pre><code id="codeContent"></code></pre>
+    <a id="codeFileLink" class="button secondary" href="#" target="_blank" rel="noreferrer">Открыть файл на GitHub ↗</a>
+  </dialog>
+  <script src="assets/app.js"></script>
+</body>
+</html>
