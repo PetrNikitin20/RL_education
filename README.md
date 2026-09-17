@@ -8,7 +8,7 @@
 ## Что включено
 
 1. Многорукий бандит: ε-greedy, UCB1, Thompson sampling, награда и cumulative regret.
-2. Cross-Entropy Method: среда «собака–кость», элитные траектории, reward shaping.
+2. Cross-Entropy Method: случайные позиции собаки и нескольких костей, пространства из 4/8/12 действий, элитные траектории, reward shaping, таблица политики и частоты действий.
 3. Q-learning, DQN, Double DQN и Dueling Double DQN: учебная торговая среда, комиссии и риск-метрики.
 4. Multi-agent RL: три роли — Market, Risk и News Agent — и координация портфеля.
 

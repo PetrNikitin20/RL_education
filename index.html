@@ -102,17 +102,19 @@
         <p>Политика обучается на лучших траекториях. Порог элитности превращает накопленный опыт в новый обучающий набор.</p>
       </div>
       <div class="lab-brief">
-        <article><span>Постановка задачи</span><h3>Найти короткий путь к кости</h3><p>Собака стартует в левом верхнем углу и выбирает одно из четырёх перемещений. CEM должен повысить вероятность успешных коротких траекторий.</p></article>
-        <article><span>Данные</span><h3>Эпизоды, созданные политикой</h3><p>Каждая запись содержит координату, действие, награду и признак завершения. Обучение использует пары «состояние–действие» из элитных эпизодов.</p></article>
+        <article><span>Постановка задачи</span><h3>Собрать все кости за минимальное число ходов</h3><p>Собака и кости появляются в случайных свободных клетках. За отдельную кость начисляется небольшая награда, за сбор всех костей — дополнительная супернаграда.</p></article>
+        <article><span>Данные</span><h3>Траектории текущей политики</h3><p>Каждая запись содержит координату, выбранное действие, награду, оставшиеся кости и признак завершения. CEM обучается на действиях из лучших эпизодов.</p></article>
       </div>
       <p class="animation-label"><span>Анимация</span> Сначала обучите политику, затем нажмите «Показать политику»: собака пройдёт маршрут по клеткам и подберёт кость.</p>
       <div class="demo-shell cem-shell">
         <aside class="control-panel">
           <label>Размер поля<select id="gridSize"><option>7</option><option selected>9</option><option>11</option></select></label>
+          <label>Количество костей<select id="boneCount"><option>1</option><option selected>3</option><option>5</option></select></label>
+          <label>Количество действий<select id="actionCount"><option value="4">4 · стороны</option><option value="8" selected>8 · + диагонали</option><option value="12">12 · + прыжки</option></select></label>
           <label>Эпизодов в итерации<output id="sessionsOut">80</output><input id="sessions" type="range" min="20" max="200" step="20" value="80"></label>
           <label>Элитный процентиль<output id="eliteOut">75%</output><input id="elite" type="range" min="50" max="95" step="5" value="75"></label>
           <label>Штраф за шаг<output id="stepPenaltyOut">−0.02</output><input id="stepPenalty" type="range" min="-0.1" max="0" step="0.01" value="-0.02"></label>
-          <div class="button-row"><button id="cemTrain" class="button primary">Обучить ×1</button><button id="cemAuto" class="button secondary">×10</button><button id="cemReset" class="icon-button">↻</button></div>
+          <div class="button-row"><button id="cemTrain" class="button primary">Обучить ×1</button><button id="cemAuto" class="button secondary">×10</button><button id="cemReset" class="icon-button" title="Новая случайная задача">🎲</button></div>
           <button class="code-link" data-open-code="cem">{ } Модули CEM</button>
         </aside>
         <div class="demo-stage cem-stage">
@@ -120,13 +122,17 @@
             <div id="dogGrid" class="dog-grid" aria-label="Среда собака и кость"></div>
             <div class="cem-metrics">
               <div class="score-ring"><span id="cemSuccess">0%</span><small>успех</small></div>
-              <dl><div><dt>Итерация</dt><dd id="cemIteration">0</dd></div><div><dt>Средняя награда</dt><dd id="cemMean">0.00</dd></div><div><dt>Порог элиты</dt><dd id="cemThreshold">—</dd></div><div><dt>Средняя длина</dt><dd id="cemLength">—</dd></div><div><dt>Собрано костей</dt><dd id="cemBones">0</dd></div></dl>
-              <button id="cemPlay" class="button secondary wide">▶ Показать политику и собрать кость</button>
+              <dl><div><dt>Итерация</dt><dd id="cemIteration">0</dd></div><div><dt>Средняя награда</dt><dd id="cemMean">0.00</dd></div><div><dt>Порог элиты</dt><dd id="cemThreshold">—</dd></div><div><dt>Средняя длина</dt><dd id="cemLength">—</dd></div><div><dt>Кости</dt><dd><span id="cemBones">0</span>/<span id="cemBonesTotal">3</span></dd></div></dl>
+              <button id="cemPlay" class="button secondary wide">▶ Показать лучшую политику</button>
             </div>
           </div>
-          <canvas id="cemChart" width="900" height="220"></canvas>
+          <div class="cem-charts">
+            <figure><figcaption>Доля эпизодов, где собраны все кости</figcaption><canvas id="cemChart" width="900" height="250"></canvas></figure>
+            <figure><figcaption>Количество ходов по каждому действию</figcaption><canvas id="cemActionChart" width="900" height="250"></canvas></figure>
+          </div>
         </div>
       </div>
+      <section class="policy-panel" aria-labelledby="policyTitle"><div><p class="eyebrow">Результат обучения</p><h3 id="policyTitle">Лучшая политика</h3><p id="cemPolicySummary">Политика появится после первой итерации обучения.</p></div><div><div id="cemPolicyTable" class="policy-table" aria-label="Таблица лучшей политики"></div><p id="cemActionLegend" class="action-legend"></p></div></section>
       <div class="action-report" aria-live="polite"><div><span>Вывод по последнему действию</span><strong id="cemInsight">Обучите политику и запустите маршрут.</strong></div><ol id="cemActionLog" class="action-log"></ol></div>
       <div class="pipeline"><span>1 · Сэмплировать N эпизодов</span><i>→</i><span>2 · Найти порог γ</span><i>→</i><span>3 · Отобрать элиту</span><i>→</i><span>4 · Обучить π<sub>θ</sub></span></div>
     </section>
