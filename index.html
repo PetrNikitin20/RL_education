@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Интерактивные демонстрации к лабораторным работам по обучению с подкреплением">
   <title>RL Lab — интерактивный практикум</title>
-  <link rel="stylesheet" href="assets/styles.css?v=moex-20260920">
+  <link rel="stylesheet" href="assets/styles.css?v=labs-20260920-2">
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -14,7 +14,7 @@
       <span class="brand-mark">RL</span><span>education</span>
     </a>
     <nav aria-label="Разделы практикума">
-      <a href="?demo=bandit#bandit">Бандит</a><a href="?demo=cem#cem">CEM</a><a href="?demo=trading#trading">DQN</a><a href="?demo=marl#marl">MARL</a>
+      <a href="?demo=lab1#bandit">Лаб. 1</a><a href="?demo=tabular#tabular">Лаб. 2</a><a href="?demo=trading#trading">Лаб. 3</a><a href="?demo=marl#marl">Лаб. 4</a>
     </nav>
     <a class="repo-link" href="https://github.com/PetrNikitin20/RL_education" target="_blank" rel="noreferrer">GitHub ↗</a>
   </header>
@@ -36,7 +36,7 @@
         <h1>От действия к<br><span>разумной политике</span></h1>
         <p class="lead">На странице открыт один стенд. Остальные примеры загружаются по ссылкам, поэтому во время лекции ничто не отвлекает от текущего эксперимента.</p>
         <div class="hero-actions">
-          <a class="button primary" href="?demo=bandit#bandit">Начать эксперимент</a>
+          <a class="button primary" href="?demo=lab1#bandit">Начать эксперимент</a>
           <button class="button secondary" data-open-code="rl-loop">Показать цикл RL</button>
         </div>
         <div class="formula-strip">
@@ -70,10 +70,10 @@
     <section class="section compact demo-directory" aria-label="Выбор демонстрации">
       <div class="section-heading"><p class="eyebrow">Интерактивные примеры</p><h2>Один стенд за один раз</h2></div>
       <div class="concept-grid">
-        <a href="?demo=bandit#bandit"><em>01</em><h3>Многорукий бандит</h3><p>Исследование, использование и regret.</p></a>
-        <a href="?demo=cem#cem"><em>02</em><h3>Собака и кость</h3><p>Cross-Entropy Method на элитных траекториях.</p></a>
-        <a href="?demo=trading#trading"><em>03</em><h3>Торговый агент</h3><p>DQN, Double DQN и dueling architecture.</p></a>
-        <a href="?demo=marl#marl"><em>04</em><h3>Команда агентов</h3><p>Market, Risk и News Agent в одном портфеле.</p></a>
+        <a href="?demo=lab1#bandit"><em>01</em><h3>Бандит + CEM</h3><p>Exploration/exploitation и обучение на элитных траекториях.</p></a>
+        <a href="?demo=tabular#tabular"><em>02</em><h3>Табличный агент MOEX</h3><p>Q-learning, SARSA и Expected SARSA с финансовыми индикаторами.</p></a>
+        <a href="?demo=trading#trading"><em>03</em><h3>Глубокий торговый агент</h3><p>DQN, Double DQN и dueling architecture.</p></a>
+        <a href="?demo=marl#marl"><em>04</em><h3>Команда агентов</h3><p>Market, Risk и Allocation Agent в одном портфеле.</p></a>
       </div>
     </section>
 
@@ -104,6 +104,7 @@
       </div>
       <div class="action-report" aria-live="polite"><div><span>Вывод по последнему действию</span><strong id="banditInsight">Эксперимент ещё не запущен.</strong></div><ol id="banditActionLog" class="action-log"></ol></div>
       <div class="explain-grid"><article><b>Исследование</b><p>Случайно проверяем альтернативы и собираем информацию.</p></article><article><b>Использование</b><p>Выбираем действие с максимальной текущей оценкой Q(a).</p></article><article><b>Метрики</b><p>Средняя награда, доля оптимальных действий, cumulative regret.</p></article></div>
+      <div class="material-row"><a class="material-link" href="materials/Лабораторная работа 1 Бандит и CEM.docx" download>↓ Лабораторная №1</a><a class="material-link" href="slides/Лекция к лабораторной работе 1 Бандит и CEM.pptx" download>↓ Презентация №1</a></div>
     </section>
 
     <section id="cem" class="lab section">
@@ -147,6 +148,25 @@
       <div class="pipeline"><span>1 · Сэмплировать N эпизодов</span><i>→</i><span>2 · Найти порог γ</span><i>→</i><span>3 · Отобрать элиту</span><i>→</i><span>4 · Обучить π<sub>θ</sub></span></div>
     </section>
 
+    <section id="tabular" class="lab section">
+      <div class="lab-intro"><div><p class="eyebrow">Лабораторная № 2 · TD control</p><h2>Табличный агент на акциях MOEX</h2></div><p>Одинаковые данные и временные границы с лабораторной №3, но без нейронной сети: сравниваются Q-learning, SARSA и Expected SARSA.</p></div>
+      <div class="lab-brief"><article><span>Постановка задачи</span><h3>CASH или LONG по дискретному состоянию</h3><p>Агент выбирает позицию на следующий торговый день. Награда учитывает доходность, комиссию и риск. Цель — проверить, когда табличные методы достаточны.</p></article><article><span>Данные и показатели</span><h3>OHLCV + признаки только из прошлого</h3><p id="tabularDataDescription">MOEX ISS, TQBR, 2022–2025. Доходность, SMA, RSI, MACD, ATR, Bollinger bandwidth, волатильность и z-score объёма.</p></article></div>
+      <div class="prediction-card" data-prediction="tabular"><div><span>До запуска</span><strong>Какой TD-алгоритм даст лучший Sharpe на test?</strong></div><select id="tabularPrediction"><option value="">Выберите гипотезу</option><option>Q-learning</option><option>SARSA</option><option>Expected SARSA</option><option>Buy & Hold</option></select><button class="mini-button lock-prediction" type="button">Зафиксировать</button><output>Гипотеза ещё не зафиксирована.</output></div>
+      <div class="demo-shell trading-shell"><aside class="control-panel">
+        <label>Компания<select id="tabularTicker"><option value="SBER">SBER · Сбербанк</option><option value="GAZP">GAZP · Газпром</option><option value="LKOH">LKOH · ЛУКОЙЛ</option><option value="NVTK">NVTK · НОВАТЭК</option><option value="GMKN">GMKN · Норникель</option><option value="MGNT">MGNT · Магнит</option></select></label>
+        <label>Алгоритм<select id="tabularAlgo"><option>Q-learning</option><option>SARSA</option><option selected>Expected SARSA</option></select></label>
+        <label>Набор признаков<select id="indicatorSet"><option value="basic">Базовый · trend, momentum, volatility</option><option value="technical" selected>Технический · + RSI, MACD, ATR</option><option value="extended">Расширенный · + Bollinger, объём, drawdown</option></select></label>
+        <label>Скорость обучения α <output id="alphaOut">0.15</output><input id="alpha" type="range" min="0.02" max="0.5" step="0.01" value="0.15"></label>
+        <label>Дисконт γ <output id="gammaOut">0.95</output><input id="gamma" type="range" min="0.7" max="0.99" step="0.01" value="0.95"></label>
+        <label>Комиссия <output id="tabularFeeOut">0.10%</output><input id="tabularFee" type="range" min="0" max="0.5" step="0.05" value="0.1"></label>
+        <div class="button-row"><button id="tabularRun" class="button primary">Обучить и проверить</button><button id="tabularReset" class="icon-button" title="Сбросить">↻</button></div>
+        <button class="code-link" data-open-code="tabular">{ } TD-обновления</button>
+        <a class="material-link" href="materials/Лабораторная работа 2 Табличный агент MOEX.docx" download>↓ Лабораторная №2</a><a class="material-link" href="slides/Лекция к лабораторной работе 2 Табличное RL на MOEX.pptx" download>↓ Презентация №2</a>
+      </aside><div class="demo-stage"><div class="chart-header"><div><small id="tabularDate">Train → validation → test</small><strong id="tabularEquity">₽100 000</strong></div><div class="trade-action" id="tabularAction">READY</div><div class="legend"><span class="agent-line">TD-агент</span><span class="base-line">Buy & Hold</span></div></div><canvas id="tabularChart" width="900" height="350"></canvas><div class="stat-row finance"><div><small>Доходность</small><strong id="tabularReturn">0.0%</strong></div><div><small>Sharpe</small><strong id="tabularSharpe">0.00</strong></div><div><small>Max drawdown</small><strong id="tabularDrawdown">0.0%</strong></div><div><small>Сделок</small><strong id="tabularTrades">0</strong></div></div><div class="teacher-only split-strip"><span>TRAIN · 2022–2023</span><span>VALIDATION · 2024</span><span>TEST · 2025</span></div></div></div>
+      <div class="action-report" aria-live="polite"><div><span>Интерпретация результата</span><strong id="tabularInsight">Зафиксируйте гипотезу и запустите обучение.</strong></div><ol id="tabularActionLog" class="action-log"></ol></div>
+      <section class="comparison-panel"><div><p class="eyebrow">Сравнение</p><h3>Один test-период — три TD-алгоритма</h3></div><div id="tabularComparison" class="comparison-table"></div></section>
+    </section>
+
     <section id="trading" class="lab section">
       <div class="lab-intro">
         <div><p class="eyebrow">Лабораторная № 3 · DQN → Dueling DDQN</p><h2>Агент на акциях MOEX</h2></div>
@@ -168,6 +188,7 @@
           <div class="button-row"><button id="tradeRun" class="button primary">Запустить test</button><button id="tradeReset" class="icon-button" title="Сбросить">↻</button></div>
           <button class="code-link" data-open-code="trading">{ } Архитектура агента</button>
           <a class="material-link" href="materials/Лабораторная работа 3 DQN на данных MOEX.docx" download>↓ Скачать лабораторную №3</a>
+          <a class="material-link" href="slides/Лекция к лабораторной работе 3 DQN на MOEX.pptx" download>↓ Презентация №3</a>
           <a class="material-link" href="https://iss.moex.com/iss/reference/409" target="_blank" rel="noreferrer">Источник данных MOEX ISS ↗</a>
         </aside>
         <div class="demo-stage">
@@ -204,6 +225,7 @@
           <button id="marlReset" class="button secondary wide">Сбросить портфель</button>
           <button class="code-link" data-open-code="marl">{ } Контракты агентов</button>
           <a class="material-link" href="materials/Лабораторная работа 4 MARL портфель MOEX.docx" download>↓ Скачать лабораторную №4</a>
+          <a class="material-link" href="slides/Лекция к лабораторной работе 4 MARL и портфель.pptx" download>↓ Презентация №4</a>
           <a class="material-link" href="https://iss.moex.com/iss/reference/409" target="_blank" rel="noreferrer">Источник данных MOEX ISS ↗</a>
         </aside>
         <div class="demo-stage marl-stage">
@@ -238,6 +260,6 @@
     <pre><code id="codeContent"></code></pre>
     <a id="codeFileLink" class="button secondary" href="#" target="_blank" rel="noreferrer">Открыть файл на GitHub ↗</a>
   </dialog>
-  <script src="assets/app.js?v=moex-20260920"></script>
+  <script src="assets/app.js?v=labs-20260920-2"></script>
 </body>
 </html>
