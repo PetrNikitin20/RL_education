@@ -9,10 +9,12 @@
 
 1. Многорукий бандит: ε-greedy, UCB1, Thompson sampling, награда и cumulative regret.
 2. Cross-Entropy Method: случайные позиции собаки и нескольких костей, пространства из 4/8/12 действий, элитные траектории, reward shaping, таблица политики и частоты действий.
-3. Q-learning, DQN, Double DQN и Dueling Double DQN: учебная торговая среда, комиссии и риск-метрики.
-4. Multi-agent RL: три роли — Market, Risk и News Agent — и координация портфеля.
+3. DQN, Double DQN и Dueling Double DQN: выбор российской компании, реальный снимок дневных данных MOEX ISS, временное разбиение, комиссии, риск-метрики и сравнение политик.
+4. Multi-agent RL: портфель из 3–6 российских компаний, Market, Risk и Allocation Agent, динамические веса и сравнение с равновзвешенным портфелем.
 
-Веб-демонстрации выполняются полностью в браузере и не требуют сервера. На странице одновременно открыт один пример; остальные выбираются по ссылкам в верхнем меню. Для каждого примера приведены постановка задачи, описание данных, анимация и динамический вывод после действия. В CEM собака проходит маршрут по клеткам и собирает кость. Числа в торговом стенде синтетические и предназначены только для обучения.
+Веб-демонстрации выполняются полностью в браузере. На странице одновременно открыт один пример; остальные выбираются по ссылкам в верхнем меню. Для каждого примера приведены постановка задачи, описание данных, анимация, прогноз до запуска, динамический вывод, самопроверка и экспорт протокола. Режим преподавателя показывает временное разбиение и методические комментарии.
+
+Лабораторные №3–4 используют зафиксированный снимок публичного MOEX ISS: дневные свечи TQBR за 2022–2025 годы для SBER, GAZP, LKOH, NVTK, GMKN и MGNT. Файл `data/moex_daily.json` можно обновить скриптом `tools/fetch_moex_data.py`. Браузерный стенд выполняет прозрачную детерминированную оценку эталонных политик; полноценное обучение нейросетей выполняется в Python и оценивается только на хронологическом test.
 
 ## Структура
 
@@ -22,8 +24,10 @@ python/bandit/           стратегии многорукого бандит�
 python/cem_dog_bone/     среда, политика и обучение CEM
 python/trading/          торговая среда и Dueling Double DQN
 python/marl/             три агента и координатор
+data/                    воспроизводимый снимок дневных данных MOEX ISS
+tools/                   скрипт обновления данных из MOEX ISS
 slides/                  презентация к лабораторной работе
-materials/               подробный текст лектора к каждому слайду
+materials/               задания к лабораторным работам №3–4
 ```
 
 ## Локальный запуск сайта
@@ -33,6 +37,16 @@ python -m http.server 8000
 ```
 
 Откройте `http://localhost:8000`.
+
+Прямое открытие `index.html` через `file://` не подходит: браузер блокирует загрузку JSON. Используйте локальный HTTP-сервер или GitHub Pages.
+
+## Обновление данных MOEX
+
+```bash
+python tools/fetch_moex_data.py
+```
+
+Используется публичный endpoint дневных свечей MOEX ISS без API-ключа. В отчёте обязательно указываются период, режим торгов, дата среза и тикеры.
 
 ## Запуск Python-примеров
 
@@ -51,6 +65,8 @@ python -m pip install -r requirements.txt
 - Сравнивать с Buy & Hold и простой rule-based стратегией.
 - Отчёт: cumulative return, annualized volatility, Sharpe/Sortino, maximum drawdown, turnover, число сделок.
 - Не делать вывод о будущей доходности по одному историческому периоду.
+- Выбирать гиперпараметры только по validation; test открывать один раз после фиксации конфигурации.
+- Повторять обучение с несколькими seed и сообщать медиану и разброс.
 
 ## Основные источники
 
@@ -59,6 +75,7 @@ python -m pip install -r requirements.txt
 - Mnih et al. *Human-level control through deep reinforcement learning* — https://doi.org/10.1038/nature14236
 - van Hasselt et al. *Deep Reinforcement Learning with Double Q-learning* — https://doi.org/10.1609/aaai.v30i1.10295
 - Wang et al. *Dueling Network Architectures for Deep Reinforcement Learning* — https://proceedings.mlr.press/v48/wangf16.html
+- MOEX ISS candles — https://iss.moex.com/iss/reference/409
 - FinRL — https://github.com/AI4Finance-Foundation/FinRL
 - PettingZoo — https://pettingzoo.farama.org/
 - QMIX — https://proceedings.mlr.press/v80/rashid18a.html

@@ -1,4 +1,4 @@
-"""Типизированные предложения специализированных агентов."""
+"""Typed proposals for the market, risk and allocation agents."""
 from dataclasses import dataclass
 
 
@@ -11,8 +11,8 @@ class Proposal:
 
 class MarketAgent:
     def act(self, obs):
-        signal = max(-1, min(1, .6 * obs["momentum"] - .3 * obs["volatility"]))
-        return Proposal(signal, .75, "momentum + volatility regime")
+        signal = max(-1, min(1, obs["momentum"] / (obs["volatility"] + 1e-8)))
+        return Proposal(signal, .75, "cross-sectional momentum adjusted for volatility")
 
 
 class RiskAgent:
@@ -21,6 +21,7 @@ class RiskAgent:
         return Proposal(max(-1, signal), .9, "drawdown and VaR constraint")
 
 
-class NewsAgent:
+class AllocationAgent:
     def act(self, obs):
-        return Proposal(obs["sentiment"], obs["news_confidence"], "event sentiment")
+        signal = max(-1, min(1, obs["diversification"] - obs["turnover"]))
+        return Proposal(signal, .80, "diversification benefit minus turnover")

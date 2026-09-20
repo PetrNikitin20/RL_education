@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Интерактивные демонстрации к лабораторным работам по обучению с подкреплением">
   <title>RL Lab — интерактивный практикум</title>
-  <link rel="stylesheet" href="assets/styles.css?v=cem-20260917">
+  <link rel="stylesheet" href="assets/styles.css?v=moex-20260920">
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -18,6 +18,16 @@
     </nav>
     <a class="repo-link" href="https://github.com/PetrNikitin20/RL_education" target="_blank" rel="noreferrer">GitHub ↗</a>
   </header>
+
+  <div class="learning-bar" aria-label="Инструменты практикума">
+    <div><span class="status-dot"></span><strong id="demoStatus">Данные загружаются</strong><small id="seedLabel">seed 20260920</small></div>
+    <div class="learning-actions">
+      <button id="modeToggle" class="mini-button" type="button" aria-pressed="false">Режим студента</button>
+      <button id="guidedRun" class="mini-button" type="button">▶ Демонстрационный тур</button>
+      <button id="exportCsv" class="mini-button" type="button">↓ Протокол CSV</button>
+      <button id="printReport" class="mini-button" type="button">Печать / PDF</button>
+    </div>
+  </div>
 
   <main>
     <section id="overview" class="hero section">
@@ -139,61 +149,74 @@
 
     <section id="trading" class="lab section">
       <div class="lab-intro">
-        <div><p class="eyebrow">04 · Q-learning → DDDQN</p><h2>Торговый агент</h2></div>
-        <p>Без обещаний доходности: учебный симулятор показывает, почему временное разбиение, комиссии и риск важнее красивой кривой обучения.</p>
+        <div><p class="eyebrow">Лабораторная № 3 · DQN → Dueling DDQN</p><h2>Агент на акциях MOEX</h2></div>
+        <p>Выберите российскую компанию и сравните политики на одном и том же тестовом периоде. Котировки загружены из официального ISS API Московской биржи.</p>
       </div>
       <div class="lab-brief">
-        <article><span>Постановка задачи</span><h3>Управлять позицией с учётом риска</h3><p>Агент выбирает позицию по рыночным признакам. Цель — улучшить риск-скорректированный результат относительно Buy &amp; Hold при заданной комиссии.</p></article>
-        <article><span>Данные</span><h3>Синтетический временной ряд</h3><p>Стенд генерирует 180 шагов цены с выбранным трендом и волатильностью. Это учебная симуляция, а не реальные котировки и не инвестиционная рекомендация.</p></article>
+        <article><span>Постановка задачи</span><h3>Выбирать CASH или LONG без утечки будущего</h3><p>Агент получает признаки, рассчитанные только по прошлым дням, и управляет одной позицией. Цель — максимизировать доходность с учётом комиссии и штрафа за просадку.</p></article>
+        <article><span>Данные</span><h3>Дневные свечи российских компаний</h3><p id="tradeDataDescription">MOEX ISS, режим TQBR: OHLCV и объём торгов за 2022–2025 годы. Train: 2022–2023, validation: 2024, test: 2025. Дата среза появится после загрузки.</p></article>
       </div>
-      <p class="animation-label"><span>Анимация</span> После запуска кривая капитала строится по шагам; итоговый вывод учитывает доходность, Sharpe, просадку, сделки и комиссию.</p>
+      <div class="prediction-card" data-prediction="trading"><div><span>До запуска</span><strong>Какой алгоритм и какая компания дадут лучший Sharpe на test?</strong></div><select id="tradePrediction"><option value="">Выберите гипотезу</option><option>DQN</option><option>Double DQN</option><option>Dueling Double DQN</option><option>Buy & Hold</option></select><button class="mini-button lock-prediction" type="button">Зафиксировать</button><output>Гипотеза ещё не зафиксирована.</output></div>
+      <p class="animation-label"><span>Анимация</span> После запуска тестовый период проигрывается по дням. Метка показывает BUY, HOLD или CASH; ниже объясняются признаки, комиссия и изменение капитала.</p>
       <div class="demo-shell trading-shell">
         <aside class="control-panel">
-          <label>Алгоритм<select id="tradingAlgo"><option>Q-learning</option><option>DQN</option><option>Double DQN</option><option selected>Dueling Double DQN</option></select></label>
+          <label>Компания<select id="tradeTicker"><option value="SBER">SBER · Сбербанк</option><option value="GAZP">GAZP · Газпром</option><option value="LKOH">LKOH · ЛУКОЙЛ</option><option value="NVTK">NVTK · НОВАТЭК</option><option value="GMKN">GMKN · Норникель</option><option value="MGNT">MGNT · Магнит</option></select></label>
+          <label>Алгоритм<select id="tradingAlgo"><option>DQN</option><option>Double DQN</option><option selected>Dueling Double DQN</option></select></label>
+          <label>Сценарий<select id="tradeScenario"><option value="standard">Стандартный · 2025 test</option><option value="stress">Стресс · худшие 120 дней</option><option value="recent">Последние 180 дней</option></select></label>
           <label>Комиссия<output id="feeOut">0.10%</output><input id="fee" type="range" min="0" max="0.5" step="0.05" value="0.1"></label>
-          <label>Риск-порог<output id="riskOut">2.0%</output><input id="risk" type="range" min="0.5" max="5" step="0.5" value="2"></label>
-          <label>Рыночный режим<select id="marketRegime"><option value="trend">Умеренный тренд</option><option value="sideways">Боковой рынок</option><option value="volatile">Высокая волатильность</option></select></label>
-          <div class="button-row"><button id="tradeRun" class="button primary">Симулировать</button><button id="tradeReset" class="icon-button">↻</button></div>
+          <label>Штраф за риск λ<output id="riskOut">0.50</output><input id="risk" type="range" min="0" max="2" step="0.1" value="0.5"></label>
+          <div class="button-row"><button id="tradeRun" class="button primary">Запустить test</button><button id="tradeReset" class="icon-button" title="Сбросить">↻</button></div>
           <button class="code-link" data-open-code="trading">{ } Архитектура агента</button>
+          <a class="material-link" href="materials/Лабораторная работа 3 DQN на данных MOEX.docx" download>↓ Скачать лабораторную №3</a>
+          <a class="material-link" href="https://iss.moex.com/iss/reference/409" target="_blank" rel="noreferrer">Источник данных MOEX ISS ↗</a>
         </aside>
         <div class="demo-stage">
-          <div class="chart-header"><div><small>Стоимость портфеля</small><strong id="equityValue">₽100 000</strong></div><div class="legend"><span class="agent-line">Агент</span><span class="base-line">Buy & Hold</span></div></div>
+          <div class="chart-header"><div><small id="tradeDate">Test ещё не запущен</small><strong id="equityValue">₽100 000</strong></div><div class="trade-action" id="tradeActionBadge">READY</div><div class="legend"><span class="agent-line">Агент</span><span class="base-line">Buy & Hold</span></div></div>
           <canvas id="tradeChart" width="900" height="350"></canvas>
           <div class="stat-row finance"><div><small>Доходность</small><strong id="tradeReturn">0.0%</strong></div><div><small>Sharpe</small><strong id="tradeSharpe">0.00</strong></div><div><small>Max drawdown</small><strong id="tradeDrawdown">0.0%</strong></div><div><small>Сделок</small><strong id="tradeCount">0</strong></div></div>
+          <div class="teacher-only split-strip"><span>TRAIN · 2022–2023</span><span>VALIDATION · 2024</span><span>TEST · 2025</span></div>
         </div>
       </div>
       <div class="action-report" aria-live="polite"><div><span>Вывод по последнему запуску</span><strong id="tradeInsight">Выберите настройки и запустите симуляцию.</strong></div><ol id="tradeActionLog" class="action-log"></ol></div>
+      <div id="tradeComparison" class="comparison-table" aria-live="polite"></div>
       <div class="algorithm-cards"><article><b>DQN</b><p>Нейросеть аппроксимирует Q(s,a); replay-buffer разрушает корреляцию выборки.</p></article><article><b>DDQN</b><p>Online-сеть выбирает действие, target-сеть оценивает — меньше завышение.</p></article><article><b>Dueling</b><p>Раздельно оценивает V(s) и преимущество A(s,a), затем объединяет.</p></article></div>
     </section>
 
     <section id="marl" class="lab section">
       <div class="lab-intro">
-        <div><p class="eyebrow">05 · Multi-agent RL</p><h2>Команда портфельных агентов</h2></div>
-        <p>Три специализированных агента предлагают решения. Координатор агрегирует их сигналы, не являясь четвертым агентом.</p>
+        <div><p class="eyebrow">Лабораторная № 4 · Multi-agent RL</p><h2>Портфель российских компаний</h2></div>
+        <p>Студент формирует набор эмитентов, а агенты рынка, риска и аллокации согласуют веса портфеля на реальном тестовом периоде MOEX.</p>
       </div>
       <div class="lab-brief">
-        <article><span>Постановка задачи</span><h3>Согласовать три специализированных решения</h3><p>Market, Risk и News Agent формируют сигналы. Координатор объединяет их и распределяет капитал, соблюдая жёсткий лимит позиции.</p></article>
-        <article><span>Данные</span><h3>Синтетические сигналы и события</h3><p>На каждом дне генерируются рыночный импульс, риск-сигнал и новостной сентимент. История нужна для объяснения кооперации, а не для прогноза рынка.</p></article>
+        <article><span>Постановка задачи</span><h3>Динамически управлять портфелем</h3><p>Market Agent ранжирует доходность, Risk Agent ограничивает волатильность и концентрацию, Allocation Agent формирует целевые веса. Координатор выполняет ребалансировку.</p></article>
+        <article><span>Данные</span><h3>Синхронизированные свечи MOEX</h3><p id="marlDataDescription">Те же дневные данные TQBR и то же временное разбиение, что в лабораторной №3. Это позволяет проверить переносимость решений на портфель.</p></article>
       </div>
-      <p class="animation-label"><span>Анимация</span> Нажмите «Следующий день»: карточки агентов обновятся, координатор покажет решение, а аллокация изменится.</p>
+      <div class="prediction-card" data-prediction="marl"><div><span>До запуска</span><strong>Какой портфель окажется устойчивее равновзвешенного?</strong></div><select id="marlPrediction"><option value="">Выберите гипотезу</option><option>CTDE снизит просадку</option><option>Независимые политики дадут выше доходность</option><option>Равновзвешенный baseline победит</option></select><button class="mini-button lock-prediction" type="button">Зафиксировать</button><output>Гипотеза ещё не зафиксирована.</output></div>
+      <p class="animation-label"><span>Анимация</span> Нажмите «Следующая ребалансировка»: карточки агентов покажут оценки, веса компаний изменятся, а журнал объяснит вклад каждого решения.</p>
       <div class="demo-shell marl-shell">
         <aside class="control-panel">
-          <label>Влияние новостей<output id="newsWeightOut">30%</output><input id="newsWeight" type="range" min="0" max="60" step="5" value="30"></label>
-          <label>Лимит позиции<output id="positionOut">45%</output><input id="position" type="range" min="20" max="80" step="5" value="45"></label>
+          <fieldset class="ticker-picker"><legend>Компании · выберите 3–6</legend><label><input type="checkbox" value="SBER" checked> SBER</label><label><input type="checkbox" value="GAZP" checked> GAZP</label><label><input type="checkbox" value="LKOH" checked> LKOH</label><label><input type="checkbox" value="NVTK"> NVTK</label><label><input type="checkbox" value="GMKN"> GMKN</label><label><input type="checkbox" value="MGNT"> MGNT</label></fieldset>
+          <label>Период ребалансировки<select id="rebalancePeriod"><option value="5">5 торговых дней</option><option value="20" selected>20 торговых дней</option><option value="60">60 торговых дней</option></select></label>
+          <label>Лимит на компанию<output id="positionOut">35%</output><input id="position" type="range" min="20" max="60" step="5" value="35"></label>
           <label>Режим кооперации<select id="coopMode"><option value="ctde">CTDE / общая награда</option><option value="independent">Независимые политики</option><option value="voting">Взвешенное голосование</option></select></label>
-          <button id="marlStep" class="button primary wide">Следующий день</button>
-          <button id="marlRun" class="button secondary wide">Прогнать 30 дней</button>
+          <button id="marlStep" class="button primary wide">Следующая ребалансировка</button>
+          <button id="marlRun" class="button secondary wide">Прогнать test</button>
+          <button id="marlReset" class="button secondary wide">Сбросить портфель</button>
           <button class="code-link" data-open-code="marl">{ } Контракты агентов</button>
+          <a class="material-link" href="materials/Лабораторная работа 4 MARL портфель MOEX.docx" download>↓ Скачать лабораторную №4</a>
+          <a class="material-link" href="https://iss.moex.com/iss/reference/409" target="_blank" rel="noreferrer">Источник данных MOEX ISS ↗</a>
         </aside>
         <div class="demo-stage marl-stage">
           <div class="agent-network">
-            <article class="agent-card market"><span>01</span><b>Market Agent</b><small>тренд · импульс · волатильность</small><meter id="marketMeter" min="-1" max="1" value="0"></meter><output id="marketSignal">0.00</output></article>
-            <article class="agent-card risk"><span>02</span><b>Risk Agent</b><small>VaR · drawdown · лимиты</small><meter id="riskMeter" min="-1" max="1" value="0"></meter><output id="riskSignal">0.00</output></article>
-            <article class="agent-card news"><span>03</span><b>News Agent</b><small>сентимент · события · доверие</small><meter id="newsMeter" min="-1" max="1" value="0"></meter><output id="newsSignal">0.00</output></article>
+            <article class="agent-card market"><span>01</span><b>Market Agent</b><small>momentum · DQN score · режим рынка</small><meter id="marketMeter" min="-1" max="1" value="0"></meter><output id="marketSignal">0.00</output></article>
+            <article class="agent-card risk"><span>02</span><b>Risk Agent</b><small>volatility · drawdown · корреляция</small><meter id="riskMeter" min="-1" max="1" value="0"></meter><output id="riskSignal">0.00</output></article>
+            <article class="agent-card news"><span>03</span><b>Allocation Agent</b><small>диверсификация · turnover · лимиты</small><meter id="newsMeter" min="-1" max="1" value="0"></meter><output id="newsSignal">0.00</output></article>
             <div class="coordinator"><small>КООРДИНАТОР</small><strong id="marlDecision">HOLD</strong><span id="marlConfidence">уверенность 0%</span></div>
           </div>
-          <div class="allocation"><div><span>Акции</span><b id="stockAllocation">40%</b></div><div><span>Облигации</span><b id="bondAllocation">35%</b></div><div><span>Кэш</span><b id="cashAllocation">25%</b></div></div>
-          <div id="newsTicker" class="news-ticker">Нажмите «Следующий день», чтобы получить рыночное событие.</div>
+          <div id="portfolioWeights" class="portfolio-weights" aria-label="Веса компаний"></div>
+          <canvas id="marlChart" width="900" height="260" aria-label="Стоимость MARL-портфеля и равновзвешенного baseline"></canvas>
+          <div class="stat-row finance"><div><small>Доходность</small><strong id="marlReturn">0.0%</strong></div><div><small>Sharpe</small><strong id="marlSharpe">0.00</strong></div><div><small>Max drawdown</small><strong id="marlDrawdown">0.0%</strong></div><div><small>Turnover</small><strong id="marlTurnover">0.0%</strong></div></div>
+          <div id="newsTicker" class="news-ticker">Выберите не менее трёх компаний и запустите первую ребалансировку.</div>
         </div>
       </div>
       <div class="action-report" aria-live="polite"><div><span>Вывод по последнему дню</span><strong id="marlInsight">Запустите один день или серию из 30 дней.</strong></div><ol id="marlActionLog" class="action-log"></ol></div>
@@ -215,6 +238,6 @@
     <pre><code id="codeContent"></code></pre>
     <a id="codeFileLink" class="button secondary" href="#" target="_blank" rel="noreferrer">Открыть файл на GitHub ↗</a>
   </dialog>
-  <script src="assets/app.js?v=cem-20260917"></script>
+  <script src="assets/app.js?v=moex-20260920"></script>
 </body>
 </html>

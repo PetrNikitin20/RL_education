@@ -1,12 +1,16 @@
-"""Агрегация не добавляет четвёртого агента: это часть среды исполнения."""
-from .agents import MarketAgent, RiskAgent, NewsAgent
+"""The coordinator aggregates proposals and projects weights onto risk limits."""
+from .agents import AllocationAgent, MarketAgent, RiskAgent
 
 
-def decide(observation, news_weight=.30, position_limit=.45):
-    agents = {"market": MarketAgent(), "risk": RiskAgent(), "news": NewsAgent()}
-    weights = {"market": .50, "risk": .50 - news_weight, "news": news_weight}
+def decide(observation, allocation_weight=.30, position_limit=.35):
+    agents = {"market": MarketAgent(), "risk": RiskAgent(), "allocation": AllocationAgent()}
+    weights = {"market": .45, "risk": .55 - allocation_weight, "allocation": allocation_weight}
     proposals = {name: agent.act(observation) for name, agent in agents.items()}
     score = sum(p.signal * p.confidence * weights[name] for name, p in proposals.items())
-    stock = min(position_limit, max(.10, .35 + .35 * score))
-    bonds = min(.70, max(.15, .50 - stock * .25))
-    return {"stocks": stock, "bonds": bonds, "cash": 1 - stock - bonds}, proposals
+    risky_share = min(.95, max(.10, .60 + .30 * score))
+    raw = observation["candidate_weights"]
+    capped = [min(position_limit, risky_share * value) for value in raw]
+    total = sum(capped)
+    if total > risky_share:
+        capped = [value * risky_share / total for value in capped]
+    return {"equities": capped, "cash": 1 - sum(capped)}, proposals
