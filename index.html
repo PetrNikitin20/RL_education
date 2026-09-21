@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Интерактивные демонстрации к лабораторным работам по обучению с подкреплением">
   <title>RL Lab — интерактивный практикум</title>
-  <link rel="stylesheet" href="assets/styles.css?v=labs-20260920-2">
+  <link rel="stylesheet" href="assets/styles.css?v=labs-20260921-1">
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -104,7 +104,6 @@
       </div>
       <div class="action-report" aria-live="polite"><div><span>Вывод по последнему действию</span><strong id="banditInsight">Эксперимент ещё не запущен.</strong></div><ol id="banditActionLog" class="action-log"></ol></div>
       <div class="explain-grid"><article><b>Исследование</b><p>Случайно проверяем альтернативы и собираем информацию.</p></article><article><b>Использование</b><p>Выбираем действие с максимальной текущей оценкой Q(a).</p></article><article><b>Метрики</b><p>Средняя награда, доля оптимальных действий, cumulative regret.</p></article></div>
-      <div class="material-row"><a class="material-link" href="materials/Лабораторная работа 1 Бандит и CEM.docx" download>↓ Лабораторная №1</a><a class="material-link" href="slides/Лекция к лабораторной работе 1 Бандит и CEM.pptx" download>↓ Презентация №1</a></div>
     </section>
 
     <section id="cem" class="lab section">
@@ -161,7 +160,6 @@
         <label>Комиссия <output id="tabularFeeOut">0.10%</output><input id="tabularFee" type="range" min="0" max="0.5" step="0.05" value="0.1"></label>
         <div class="button-row"><button id="tabularRun" class="button primary">Обучить и проверить</button><button id="tabularReset" class="icon-button" title="Сбросить">↻</button></div>
         <button class="code-link" data-open-code="tabular">{ } TD-обновления</button>
-        <a class="material-link" href="materials/Лабораторная работа 2 Табличный агент MOEX.docx" download>↓ Лабораторная №2</a><a class="material-link" href="slides/Лекция к лабораторной работе 2 Табличное RL на MOEX.pptx" download>↓ Презентация №2</a>
       </aside><div class="demo-stage"><div class="chart-header"><div><small id="tabularDate">Train → validation → test</small><strong id="tabularEquity">₽100 000</strong></div><div class="trade-action" id="tabularAction">READY</div><div class="legend"><span class="agent-line">TD-агент</span><span class="base-line">Buy & Hold</span></div></div><canvas id="tabularChart" width="900" height="350"></canvas><div class="stat-row finance"><div><small>Доходность</small><strong id="tabularReturn">0.0%</strong></div><div><small>Sharpe</small><strong id="tabularSharpe">0.00</strong></div><div><small>Max drawdown</small><strong id="tabularDrawdown">0.0%</strong></div><div><small>Сделок</small><strong id="tabularTrades">0</strong></div></div><div class="teacher-only split-strip"><span>TRAIN · 2022–2023</span><span>VALIDATION · 2024</span><span>TEST · 2025</span></div></div></div>
       <div class="action-report" aria-live="polite"><div><span>Интерпретация результата</span><strong id="tabularInsight">Зафиксируйте гипотезу и запустите обучение.</strong></div><ol id="tabularActionLog" class="action-log"></ol></div>
       <section class="comparison-panel"><div><p class="eyebrow">Сравнение</p><h3>Один test-период — три TD-алгоритма</h3></div><div id="tabularComparison" class="comparison-table"></div></section>
@@ -187,8 +185,6 @@
           <label>Штраф за риск λ<output id="riskOut">0.50</output><input id="risk" type="range" min="0" max="2" step="0.1" value="0.5"></label>
           <div class="button-row"><button id="tradeRun" class="button primary">Запустить test</button><button id="tradeReset" class="icon-button" title="Сбросить">↻</button></div>
           <button class="code-link" data-open-code="trading">{ } Архитектура агента</button>
-          <a class="material-link" href="materials/Лабораторная работа 3 DQN на данных MOEX.docx" download>↓ Скачать лабораторную №3</a>
-          <a class="material-link" href="slides/Лекция к лабораторной работе 3 DQN на MOEX.pptx" download>↓ Презентация №3</a>
           <a class="material-link" href="https://iss.moex.com/iss/reference/409" target="_blank" rel="noreferrer">Источник данных MOEX ISS ↗</a>
         </aside>
         <div class="demo-stage">
@@ -224,8 +220,6 @@
           <button id="marlRun" class="button secondary wide">Прогнать test</button>
           <button id="marlReset" class="button secondary wide">Сбросить портфель</button>
           <button class="code-link" data-open-code="marl">{ } Контракты агентов</button>
-          <a class="material-link" href="materials/Лабораторная работа 4 MARL портфель MOEX.docx" download>↓ Скачать лабораторную №4</a>
-          <a class="material-link" href="slides/Лекция к лабораторной работе 4 MARL и портфель.pptx" download>↓ Презентация №4</a>
           <a class="material-link" href="https://iss.moex.com/iss/reference/409" target="_blank" rel="noreferrer">Источник данных MOEX ISS ↗</a>
         </aside>
         <div class="demo-stage marl-stage">
@@ -260,6 +254,6 @@
     <pre><code id="codeContent"></code></pre>
     <a id="codeFileLink" class="button secondary" href="#" target="_blank" rel="noreferrer">Открыть файл на GitHub ↗</a>
   </dialog>
-  <script src="assets/app.js?v=labs-20260920-2"></script>
+  <script src="assets/app.js?v=labs-20260921-1"></script>
 </body>
 </html>
