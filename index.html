@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="RL Education — интерактивный браузерный симулятор и исследовательский практикум с ответственным применением искусственного интеллекта">
   <title>RL Education — от многорукого бандита до MARL</title>
-  <link rel="stylesheet" href="assets/styles.css?v=ai-mastery-20260924-1">
+  <link rel="stylesheet" href="assets/styles.css?v=project-route-20260924-2">
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -14,7 +14,7 @@
       <span class="brand-mark">RL</span><span>education</span>
     </a>
     <nav aria-label="Разделы практикума">
-      <a href="#ai-mastery">ИИ-мастерство</a><a href="?demo=lab1#bandit">Лаб. 1</a><a href="?demo=tabular#tabular">Лаб. 2</a><a href="?demo=trading#trading">Лаб. 3</a><a href="?demo=marl#marl">Лаб. 4</a>
+      <a href="#ai-mastery">ИИ-мастерство</a><a href="?demo=lab1#bandit">Лаб. 1</a><a href="?demo=tabular#tabular">Лаб. 2</a><a href="?demo=trading#trading">Лаб. 3</a><a href="?demo=marl#marl">Лаб. 4</a><a href="?demo=project#final-project">Итоговый проект</a>
     </nav>
     <a class="repo-link" href="https://github.com/PetrNikitin20/RL_education" target="_blank" rel="noreferrer">GitHub ↗</a>
   </header>
@@ -90,13 +90,8 @@
         <a href="?demo=tabular#tabular"><em>02</em><h3>Табличный агент MOEX</h3><p>Q-learning, SARSA и Expected SARSA с финансовыми индикаторами.</p></a>
         <a href="?demo=trading#trading"><em>03</em><h3>Глубокий торговый агент</h3><p>DQN, Double DQN и dueling architecture.</p></a>
         <a href="?demo=marl#marl"><em>04</em><h3>Команда агентов</h3><p>Market, Risk и Allocation Agent в одном портфеле.</p></a>
+        <a class="project-link" href="?demo=project#final-project"><em>05</em><h3>Итоговый проект</h3><p>Своя тема по RL: архитектура, проверяемые эксперименты и защита выбора модели.</p></a>
       </div>
-    </section>
-
-    <section id="final-project" class="section compact project-roadmap">
-      <div class="section-heading"><div><p class="eyebrow">Итог обучения</p><h2>Проект на любую тему по RL</h2></div><p class="section-lead">Индивидуально или командой до трёх человек.</p></div>
-      <div class="project-grid"><article><span>Обязательная основа</span><h3>Исследовательский вопрос и архитектура</h3><p>Выберите область — от робототехники и логистики до образования, рекомендаций или финансов. Сравните минимум две модели с baseline и зафиксируйте ограничения.</p></article><article><span>Защита</span><h3>Почему именно это решение</h3><p>Покажите происхождение данных, абляции и устойчивость. Защищается не только итоговая метрика, но и логика выбора среды, модели, награды и проверки.</p></article></div>
-      <article class="case-card"><div><span class="evidence-tag pilot">Пилотный обезличенный кейс · не результат конкретного студента</span><h3>Кейс A-01: выбор от табличного агента к DQN</h3><p>На открытом снимке MOEX сравниваются Q-learning, SARSA, Expected SARSA и DQN-архитектуры. Пилот показывает формат доказательства: сначала гипотеза, затем временная валидация, абляции и решение о переходе к нейросетевой модели.</p></div><dl><div><dt>Данные</dt><dd>реальные открытые MOEX</dd></div><div><dt>Результаты</dt><dd>демонстрационные значения стенда</dd></div><div><dt>Статус</dt><dd>заменить фактическим протоколом после получения согласия</dd></div></dl></article>
     </section>
 
     <section id="bandit" class="lab section">
@@ -261,6 +256,13 @@
       <div class="marl-notes"><div><b>CTDE</b><p>Централизованное обучение, децентрализованное исполнение.</p></div><div><b>Нестационарность</b><p>Среда меняется вместе с политиками других агентов.</p></div><div><b>Credit assignment</b><p>Нужно понять вклад каждого агента в общую награду.</p></div><div><b>Инструменты</b><p>PettingZoo · RLlib · MARLlib.</p></div></div>
     </section>
 
+    <section id="final-project" class="section project-roadmap" hidden>
+      <div class="section-heading"><div><p class="eyebrow">05 · Итог обучения</p><h2>Проект на любую тему по RL</h2></div><p class="section-lead">Индивидуально или командой до трёх человек.</p></div>
+      <div class="project-grid"><article><span>Обязательная основа</span><h3>Исследовательский вопрос и архитектура</h3><p>Выберите область — от робототехники и логистики до образования, рекомендаций или финансов. Сравните минимум две модели с baseline и зафиксируйте ограничения.</p></article><article><span>Защита</span><h3>Почему именно это решение</h3><p>Покажите происхождение данных, абляции и устойчивость. Защищается не только итоговая метрика, но и логика выбора среды, модели, награды и проверки.</p></article></div>
+      <article class="case-card"><div><span class="evidence-tag pilot">Пилотный обезличенный кейс · не результат конкретного студента</span><h3>Кейс A-01: выбор от табличного агента к DQN</h3><p>На открытом снимке MOEX сравниваются Q-learning, SARSA, Expected SARSA и DQN-архитектуры. Пилот показывает формат доказательства: сначала гипотеза, затем временная валидация, абляции и решение о переходе к нейросетевой модели.</p></div><dl><div><dt>Данные</dt><dd>реальные открытые MOEX</dd></div><div><dt>Результаты</dt><dd>демонстрационные значения стенда</dd></div><div><dt>Статус</dt><dd>заменить фактическим протоколом после получения согласия</dd></div></dl></article>
+      <div class="project-actions"><a class="button primary" href="https://github.com/PetrNikitin20/RL_education" target="_blank" rel="noreferrer">Материалы проекта на GitHub ↗</a><a class="button secondary" href="?demo=marl#marl">← Вернуться к лабораторной №4</a></div>
+    </section>
+
     <section class="section final-cta">
       <p class="eyebrow">Лабораторный маршрут и итоговый проект</p><h2>Вопрос → проверенный источник → эксперимент → журнал → архитектура → защита</h2>
       <div class="deliverables"><span>Гипотеза и обзор</span><span>Модульный код</span><span>Журнал происхождения</span><span>Абляции</span><span>Защита выбора модели</span></div>
@@ -276,6 +278,6 @@
     <pre><code id="codeContent"></code></pre>
     <a id="codeFileLink" class="button secondary" href="#" target="_blank" rel="noreferrer">Открыть файл на GitHub ↗</a>
   </dialog>
-  <script src="assets/app.js?v=ai-mastery-20260924-1"></script>
+  <script src="assets/app.js?v=project-route-20260924-2"></script>
 </body>
 </html>

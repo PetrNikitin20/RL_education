@@ -228,7 +228,10 @@ if (captureSection) {
 }
 const activeDemo = new URLSearchParams(location.search).get("demo") || "lab1";
 if (!captureSection) {
+  document.body.classList.toggle("project-view", activeDemo === "project");
   document.querySelectorAll(".lab").forEach(section => section.hidden = activeDemo === "lab1" ? !["bandit","cem"].includes(section.id) : section.id !== activeDemo);
+  const finalProject = document.querySelector("#final-project");
+  if (finalProject) finalProject.hidden = activeDemo !== "project";
   document.querySelectorAll('a[href*="demo="]').forEach(link => {
     if (link.href.includes(`demo=${activeDemo}`)) link.setAttribute("aria-current", "page");
   });
