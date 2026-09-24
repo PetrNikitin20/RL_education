@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Интерактивные демонстрации к лабораторным работам по обучению с подкреплением">
-  <title>RL Lab — интерактивный практикум</title>
-  <link rel="stylesheet" href="assets/styles.css?v=labs-20260921-1">
+  <meta name="description" content="RL Education — интерактивный браузерный симулятор и исследовательский практикум с ответственным применением искусственного интеллекта">
+  <title>RL Education — от многорукого бандита до MARL</title>
+  <link rel="stylesheet" href="assets/styles.css?v=ai-mastery-20260924-1">
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -14,7 +14,7 @@
       <span class="brand-mark">RL</span><span>education</span>
     </a>
     <nav aria-label="Разделы практикума">
-      <a href="?demo=lab1#bandit">Лаб. 1</a><a href="?demo=tabular#tabular">Лаб. 2</a><a href="?demo=trading#trading">Лаб. 3</a><a href="?demo=marl#marl">Лаб. 4</a>
+      <a href="#ai-mastery">ИИ-мастерство</a><a href="?demo=lab1#bandit">Лаб. 1</a><a href="?demo=tabular#tabular">Лаб. 2</a><a href="?demo=trading#trading">Лаб. 3</a><a href="?demo=marl#marl">Лаб. 4</a>
     </nav>
     <a class="repo-link" href="https://github.com/PetrNikitin20/RL_education" target="_blank" rel="noreferrer">GitHub ↗</a>
   </header>
@@ -32,9 +32,9 @@
   <main>
     <section id="overview" class="hero section">
       <div class="hero-copy">
-        <p class="eyebrow">ПАУР · подготовка к лабораторной работе</p>
-        <h1>От действия к<br><span>разумной политике</span></h1>
-        <p class="lead">На странице открыт один стенд. Остальные примеры загружаются по ссылкам, поэтому во время лекции ничто не отвлекает от текущего эксперимента.</p>
+        <p class="eyebrow">Конкурсный образовательный симулятор · цифровое и ИИ-мастерство</p>
+        <h1>RL Education<br><span>решение под контролем</span></h1>
+        <p class="lead">Интерактивный путь от многорукого бандита до мультиагентного портфеля. ИИ помогает сформулировать вопрос и проверить план, но доказательство строит студент: по источникам, коду, метрикам и журналу происхождения.</p>
         <div class="hero-actions">
           <a class="button primary" href="?demo=lab1#bandit">Начать эксперимент</a>
           <button class="button secondary" data-open-code="rl-loop">Показать цикл RL</button>
@@ -50,6 +50,22 @@
         <div class="flow action-flow">действие a<sub>t</sub> →</div>
         <div class="flow reward-flow">← награда r<sub>t+1</sub></div>
         <div class="metric-card"><small>Цель</small><strong>max 𝔼[G<sub>t</sub>]</strong></div>
+      </div>
+    </section>
+
+    <section id="ai-mastery" class="section compact ai-overview">
+      <div class="section-heading"><div><p class="eyebrow">Мастерство применения искусственного интеллекта</p><h2>ИИ предлагает — студент проверяет</h2></div><p class="section-lead">Шесть шагов превращают подсказку модели в воспроизводимое исследование.</p></div>
+      <div class="ai-route" aria-label="Исследовательский маршрут с ИИ">
+        <article><em>01</em><h3>Вопрос</h3><p>Уточнить объект, сравнение, метрики и условия опровержения гипотезы.</p></article>
+        <article><em>02</em><h3>Литература</h3><p>Получить поисковые запросы, затем открыть и проверить первичные источники.</p></article>
+        <article><em>03</em><h3>Эксперимент</h3><p>Выполнить четыре лабораторные работы с фиксированными данными и seed.</p></article>
+        <article><em>04</em><h3>Происхождение</h3><p>Записать модель, версию, промпт, данные, параметры и метрики.</p></article>
+        <article><em>05</em><h3>Архитектура</h3><p>Объединить лучшие решения в итоговую схему проекта.</p></article>
+        <article><em>06</em><h3>Защита</h3><p>Обосновать выбор модели и показать, какие советы ИИ были отклонены.</p></article>
+      </div>
+      <div class="ai-governance">
+        <article><p class="eyebrow">Правила использования ИИ</p><h3>Безопасность и академическая честность</h3><ul><li>Не передавать персональные данные, оценки, закрытые работы и ключи доступа.</li><li>Проверять факты, формулы, код и ссылки по первичным источникам.</li><li>Сохранять значимые промпты, ответы и собственные исправления.</li><li>Не выдавать сгенерированный текст и придуманные метрики за эксперимент.</li></ul></article>
+        <article><p class="eyebrow">Входная диагностика</p><h3>Готовы ли вы работать с ИИ как исследователь?</h3><div id="entryTest" class="entry-test"></div></article>
       </div>
     </section>
 
@@ -75,6 +91,12 @@
         <a href="?demo=trading#trading"><em>03</em><h3>Глубокий торговый агент</h3><p>DQN, Double DQN и dueling architecture.</p></a>
         <a href="?demo=marl#marl"><em>04</em><h3>Команда агентов</h3><p>Market, Risk и Allocation Agent в одном портфеле.</p></a>
       </div>
+    </section>
+
+    <section id="final-project" class="section compact project-roadmap">
+      <div class="section-heading"><div><p class="eyebrow">Итог обучения</p><h2>Проект на любую тему по RL</h2></div><p class="section-lead">Индивидуально или командой до трёх человек.</p></div>
+      <div class="project-grid"><article><span>Обязательная основа</span><h3>Исследовательский вопрос и архитектура</h3><p>Выберите область — от робототехники и логистики до образования, рекомендаций или финансов. Сравните минимум две модели с baseline и зафиксируйте ограничения.</p></article><article><span>Защита</span><h3>Почему именно это решение</h3><p>Покажите происхождение данных, абляции и устойчивость. Защищается не только итоговая метрика, но и логика выбора среды, модели, награды и проверки.</p></article></div>
+      <article class="case-card"><div><span class="evidence-tag pilot">Пилотный обезличенный кейс · не результат конкретного студента</span><h3>Кейс A-01: выбор от табличного агента к DQN</h3><p>На открытом снимке MOEX сравниваются Q-learning, SARSA, Expected SARSA и DQN-архитектуры. Пилот показывает формат доказательства: сначала гипотеза, затем временная валидация, абляции и решение о переходе к нейросетевой модели.</p></div><dl><div><dt>Данные</dt><dd>реальные открытые MOEX</dd></div><div><dt>Результаты</dt><dd>демонстрационные значения стенда</dd></div><div><dt>Статус</dt><dd>заменить фактическим протоколом после получения согласия</dd></div></dl></article>
     </section>
 
     <section id="bandit" class="lab section">
@@ -240,13 +262,13 @@
     </section>
 
     <section class="section final-cta">
-      <p class="eyebrow">Лабораторный маршрут</p><h2>Спроектируйте среду → определите метрики → обучите → проверьте гипотезу</h2>
-      <div class="deliverables"><span>README и гипотеза</span><span>Модульный код</span><span>Кривые обучения</span><span>Абляции</span><span>Выводы и ограничения</span></div>
+      <p class="eyebrow">Лабораторный маршрут и итоговый проект</p><h2>Вопрос → проверенный источник → эксперимент → журнал → архитектура → защита</h2>
+      <div class="deliverables"><span>Гипотеза и обзор</span><span>Модульный код</span><span>Журнал происхождения</span><span>Абляции</span><span>Защита выбора модели</span></div>
       <a class="button primary" href="https://github.com/PetrNikitin20/RL_education" target="_blank" rel="noreferrer">Открыть материалы на GitHub ↗</a>
     </section>
   </main>
 
-  <footer><span>© 2026 · Никитин Пётр Владимирович · кафедра искусственного интеллекта ФУ</span><span>Учебная демонстрация, не инвестиционная рекомендация</span></footer>
+  <footer><span>© 2026 · Никитин Пётр Владимирович · кафедра искусственного интеллекта ФУ</span><span>RL Education · учебная демонстрация, не инвестиционная рекомендация</span></footer>
 
   <dialog id="codeDialog">
     <button id="closeDialog" class="dialog-close" aria-label="Закрыть">×</button>
@@ -254,6 +276,6 @@
     <pre><code id="codeContent"></code></pre>
     <a id="codeFileLink" class="button secondary" href="#" target="_blank" rel="noreferrer">Открыть файл на GitHub ↗</a>
   </dialog>
-  <script src="assets/app.js?v=labs-20260921-1"></script>
+  <script src="assets/app.js?v=ai-mastery-20260924-1"></script>
 </body>
 </html>
